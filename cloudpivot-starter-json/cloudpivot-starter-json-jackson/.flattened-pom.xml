@@ -3,11 +3,11 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>com.cloudpivot.starter</groupId>
+    <groupId>cc.cloudpivot.starter</groupId>
     <artifactId>cloudpivot-starter-json</artifactId>
     <version>1.0.0</version>
   </parent>
-  <groupId>com.cloudpivot.starter</groupId>
+  <groupId>cc.cloudpivot.starter</groupId>
   <artifactId>cloudpivot-starter-json-jackson</artifactId>
   <version>1.0.0</version>
   <name>cloudpivot-starter-json-jackson</name>
@@ -26,7 +26,7 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>com.cloudpivot.starter</groupId>
+      <groupId>cc.cloudpivot.starter</groupId>
       <artifactId>cloudpivot-starter-core</artifactId>
       <version>1.0.0</version>
       <scope>compile</scope>

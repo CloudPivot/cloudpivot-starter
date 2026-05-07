@@ -1,3 +1,3 @@
-com.cloudpivot.starter.web.autoconfigure.mvc.WebMvcAutoConfiguration
-com.cloudpivot.starter.web.autoconfigure.cors.CorsAutoConfiguration
-com.cloudpivot.starter.web.autoconfigure.server.UndertowAutoConfiguration
+cc.cloudpivot.starter.web.autoconfigure.mvc.WebMvcAutoConfiguration
+cc.cloudpivot.starter.web.autoconfigure.cors.CorsAutoConfiguration
+cc.cloudpivot.starter.web.autoconfigure.server.UndertowAutoConfiguration

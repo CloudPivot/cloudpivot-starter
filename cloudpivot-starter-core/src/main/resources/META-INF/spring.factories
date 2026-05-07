@@ -1,2 +1,2 @@
 org.springframework.context.ApplicationListener=\
-  com.cloudpivot.starter.core.autoconfigure.CloudPivotStarterVersionLogger
+  cc.cloudpivot.starter.core.autoconfigure.CloudPivotStarterVersionLogger

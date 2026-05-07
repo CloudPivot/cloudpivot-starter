@@ -3,11 +3,11 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>com.cloudpivot.starter</groupId>
+    <groupId>cc.cloudpivot.starter</groupId>
     <artifactId>cloudpivot-starter</artifactId>
     <version>1.0.0</version>
   </parent>
-  <groupId>com.cloudpivot.starter</groupId>
+  <groupId>cc.cloudpivot.starter</groupId>
   <artifactId>cloudpivot-starter-messaging</artifactId>
   <version>1.0.0</version>
   <packaging>pom</packaging>
@@ -15,7 +15,7 @@
   <description>CloudPivot Starter 消息模块</description>
   <dependencies>
     <dependency>
-      <groupId>com.cloudpivot.starter</groupId>
+      <groupId>cc.cloudpivot.starter</groupId>
       <artifactId>cloudpivot-starter-core</artifactId>
       <version>1.0.0</version>
       <scope>compile</scope>

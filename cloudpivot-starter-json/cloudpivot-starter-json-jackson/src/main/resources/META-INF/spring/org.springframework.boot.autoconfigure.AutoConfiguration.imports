@@ -1,1 +1,1 @@
-com.cloudpivot.starter.json.jackson.autoconfigure.JacksonAutoConfiguration
+autoconfigure.cc.cloudpivot.starter.json.jackson.JacksonAutoConfiguration

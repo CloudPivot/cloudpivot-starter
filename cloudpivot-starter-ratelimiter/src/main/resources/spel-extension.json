@@ -1,5 +1,5 @@
 {
-  "com.cloudpivot.starter.ratelimiter.annotation.RateLimiter@key":{
+  "cc.cloudpivot.starter.ratelimiter.annotation.RateLimiter@key":{
     "method":{
       "parameters": true
     }

@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.cloudpivot.starter</groupId>
+        <groupId>cc.cloudpivot.starter</groupId>
         <artifactId>cloudpivot-starter</artifactId>
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
@@ -19,7 +19,7 @@
     <dependencies>
         <!-- 核心模块 -->
         <dependency>
-            <groupId>com.cloudpivot.starter</groupId>
+            <groupId>cc.cloudpivot.starter</groupId>
             <artifactId>cloudpivot-starter-core</artifactId>
         </dependency>
 
@@ -37,7 +37,7 @@
 
         <!-- JSON 模块 - Jackson -->
         <dependency>
-            <groupId>com.cloudpivot.starter</groupId>
+            <groupId>cc.cloudpivot.starter</groupId>
             <artifactId>cloudpivot-starter-json-jackson</artifactId>
         </dependency>
     </dependencies>

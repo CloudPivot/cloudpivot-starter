@@ -1,1 +1,1 @@
-com.cloudpivot.starter.cache.redisson.autoconfigure.RedissonAutoConfiguration
+cc.cloudpivot.starter.cache.redisson.autoconfigure.RedissonAutoConfiguration
