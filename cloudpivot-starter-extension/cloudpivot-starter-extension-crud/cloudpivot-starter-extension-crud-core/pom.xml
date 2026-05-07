@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.cloudpivot.starter</groupId>
+        <artifactId>cloudpivot-starter-extension-crud</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>cloudpivot-starter-extension-crud-core</artifactId>
+    <packaging>jar</packaging>
+
+    <name>${project.artifactId}</name>
+    <description>CloudPivot Starter 扩展模块 - CRUD（增删改查） - 核心模块</description>
+
+    <dependencies>
+        <!-- API 文档模块 -->
+        <dependency>
+            <groupId>com.cloudpivot.starter</groupId>
+            <artifactId>cloudpivot-starter-api-doc</artifactId>
+        </dependency>
+
+        <!-- Web 模块 -->
+        <dependency>
+            <groupId>com.cloudpivot.starter</groupId>
+            <artifactId>cloudpivot-starter-web</artifactId>
+        </dependency>
+
+        <!-- 数据访问模块 - 核心模块 -->
+        <dependency>
+            <groupId>com.cloudpivot.starter</groupId>
+            <artifactId>cloudpivot-starter-data-core</artifactId>
+        </dependency>
+
+        <!-- Excel 文件处理模块 - FastExcel -->
+        <dependency>
+            <groupId>com.cloudpivot.starter</groupId>
+            <artifactId>cloudpivot-starter-excel-fastexcel</artifactId>
+        </dependency>
+    </dependencies>
+</project>

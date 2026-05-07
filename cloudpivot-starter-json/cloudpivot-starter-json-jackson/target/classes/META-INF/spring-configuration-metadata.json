@@ -1,0 +1,22 @@
+{
+  "groups": [
+    {
+      "name": "spring.jackson",
+      "type": "com.cloudpivot.starter.json.jackson.autoconfigure.JacksonExtensionProperties",
+      "sourceType": "com.cloudpivot.starter.json.jackson.autoconfigure.JacksonExtensionProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "spring.jackson.big-number-serialize-mode",
+      "type": "com.cloudpivot.starter.json.jackson.enums.BigNumberSerializeMode",
+      "description": "大数值序列化模式",
+      "sourceType": "com.cloudpivot.starter.json.jackson.autoconfigure.JacksonExtensionProperties",
+      "defaultValue": "flexible"
+    }
+  ],
+  "hints": [],
+  "ignored": {
+    "properties": []
+  }
+}

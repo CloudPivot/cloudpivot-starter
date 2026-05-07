@@ -1,0 +1,203 @@
+/*
+ * Copyright (c) 2022-present CloudPivot Authors. All Rights Reserved.
+ * <p>
+ * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE 3.0;
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * http://www.gnu.org/licenses/lgpl.html
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.cloudpivot.starter.log.util;
+
+import cn.hutool.core.text.CharSequenceUtil;
+import cn.hutool.json.JSONUtil;
+import com.cloudpivot.starter.core.util.SpringUtils;
+import com.cloudpivot.starter.log.http.RecordableHttpRequest;
+import com.cloudpivot.starter.log.model.AccessLogProperties;
+import com.cloudpivot.starter.log.model.LogProperties;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+/**
+ * 访问日志工具类
+ *
+ * @author echo
+ * @author CloudPivot Team
+ * @since 2.10.0
+ */
+public class AccessLogUtils {
+
+    /**
+     * 静态资源路径模式
+     */
+    private static final List<String> RESOURCE_PATH = List
+        .of("/**/doc/**", "/**/doc.html", "/**/nextdoc/**", "/**/v*/api-docs/**", "/**/api-docs/**", "/**/swagger-ui/**", "/**/swagger-ui.html", "/**/swagger-resources/**", "/**/webjars/**", "/**/favicon.ico", "/**/static/**", "/**/assets/**", "/**/actuator/**", "/error", "/health");
+
+    private AccessLogUtils() {
+    }
+
+    /**
+     * 获取参数信息
+     *
+     * @param request    请求对象
+     * @param properties 属性
+     * @return {@link String }
+     */
+    public static String getParam(RecordableHttpRequest request, AccessLogProperties properties) {
+        // 是否需要打印请求参数
+        if (!properties.isPrintRequestParam()) {
+            return null;
+        }
+
+        // 参数为空返回空
+        String params = request.getParams();
+        if (CharSequenceUtil.isBlank(params)) {
+            return null;
+        }
+
+        Object paramObj;
+        if (JSONUtil.isTypeJSONArray(params)) {
+            paramObj = JSONUtil.toBean(params, List.class);
+        } else if (JSONUtil.isTypeJSONObject(params)) {
+            paramObj = JSONUtil.toBean(params, Map.class);
+        } else {
+            paramObj = params;
+        }
+
+        // 是否需要对特定入参脱敏
+        if (properties.isParamSensitive()) {
+            paramObj = processSensitiveParams(paramObj, properties.getSensitiveParams());
+        }
+
+        // 是否自动截断超长参数值
+        if (properties.isLongParamTruncate()) {
+            paramObj = processTruncateLongParams(paramObj, properties.getLongParamThreshold(), properties
+                .getLongParamMaxLength(), properties.getLongParamSuffix());
+        }
+        return JSONUtil.toJsonStr(paramObj);
+    }
+
+    /**
+     * 排除路径
+     *
+     * @param properties 属性
+     * @param path       路径
+     * @return boolean
+     */
+    public static boolean exclusionPath(LogProperties properties, String path) {
+        // 放行路由配置的排除检查
+        return properties.isMatchExcludeUri(path) || RESOURCE_PATH.stream()
+            .anyMatch(resourcePath -> SpringUtils.isMatchAnt(path, resourcePath));
+    }
+
+    /**
+     * 处理敏感参数，支持 Map 和 List<Map<String, Object>> 类型
+     *
+     * @param params          参数
+     * @param sensitiveParams 敏感参数列表
+     * @return 处理后的参数
+     */
+    private static Object processSensitiveParams(Object params, List<String> sensitiveParams) {
+        if (params instanceof Map<?, ?> map) {
+            return filterSensitiveParams(map, sensitiveParams);
+        } else if (params instanceof List<?> list) {
+            return list.stream()
+                .filter(Map.class::isInstance)
+                .map(Map.class::cast)
+                .map(item -> filterSensitiveParams(item, sensitiveParams))
+                .collect(Collectors.toList());
+        }
+        return params;
+    }
+
+    /**
+     * 过滤敏感参数
+     *
+     * @param params          参数 Map
+     * @param sensitiveParams 敏感参数列表
+     * @return 处理后的参数 Map
+     */
+    private static Map<String, Object> filterSensitiveParams(Map<?, ?> params, List<String> sensitiveParams) {
+        if (params == null || params.isEmpty() || sensitiveParams == null || sensitiveParams.isEmpty()) {
+            return params == null ? null : convertToStringObjectMap(params);
+        }
+
+        Map<String, Object> filteredParams = convertToStringObjectMap(params);
+        for (String sensitiveKey : sensitiveParams) {
+            if (filteredParams.containsKey(sensitiveKey)) {
+                filteredParams.put(sensitiveKey, "***");
+            }
+        }
+        return filteredParams;
+    }
+
+    /**
+     * 处理超长参数，支持 Map 和 List<Map<String, Object>> 类型
+     *
+     * @param params    参数
+     * @param threshold 截断阈值（值长度超过该值才截断）
+     * @param maxLength 最大长度
+     * @param suffix    后缀（如 "..."）
+     * @return 处理后的参数
+     */
+    private static Object processTruncateLongParams(Object params, int threshold, int maxLength, String suffix) {
+        if (params instanceof Map<?, ?> map) {
+            return truncateLongParams(convertToStringObjectMap(map), threshold, maxLength, suffix);
+        } else if (params instanceof List<?> list) {
+            return list.stream()
+                .filter(Map.class::isInstance)
+                .map(Map.class::cast)
+                .map(AccessLogUtils::convertToStringObjectMap)
+                .map(item -> truncateLongParams(item, threshold, maxLength, suffix))
+                .collect(Collectors.toList());
+        }
+        return params;
+    }
+
+    /**
+     * 截断超长参数
+     *
+     * @param params    参数 Map
+     * @param threshold 截断阈值（值长度超过该值才截断）
+     * @param maxLength 最大长度
+     * @param suffix    后缀（如 "..."）
+     * @return 处理后的参数 Map
+     */
+    private static Map<String, Object> truncateLongParams(Map<String, Object> params,
+                                                          int threshold,
+                                                          int maxLength,
+                                                          String suffix) {
+        if (params == null || params.isEmpty()) {
+            return params;
+        }
+
+        Map<String, Object> truncatedParams = new HashMap<>(params);
+        for (Map.Entry<String, Object> entry : truncatedParams.entrySet()) {
+            Object value = entry.getValue();
+            if (value instanceof String strValue && strValue.length() > threshold) {
+                entry.setValue(strValue.substring(0, Math.min(strValue.length(), maxLength)) + suffix);
+            }
+        }
+        return truncatedParams;
+    }
+
+    private static Map<String, Object> convertToStringObjectMap(Map<?, ?> params) {
+        if (params == null || params.isEmpty()) {
+            return Map.of();
+        }
+        return params.entrySet()
+            .stream()
+            .collect(Collectors.toMap(entry -> String.valueOf(entry.getKey()), Map.Entry::getValue, (left, right) -> right,
+                HashMap::new));
+    }
+}

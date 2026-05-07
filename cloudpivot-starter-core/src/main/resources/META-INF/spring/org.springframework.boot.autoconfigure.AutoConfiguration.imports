@@ -1,0 +1,2 @@
+com.cloudpivot.starter.core.autoconfigure.application.ApplicationAutoConfiguration
+com.cloudpivot.starter.core.autoconfigure.threadpool.ThreadPoolAutoConfiguration
